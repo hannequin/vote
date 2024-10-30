@@ -2,6 +2,7 @@ name: Docker Image CI
 
 on:
   push:
+    branches: 'main'
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -11,16 +12,15 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
       id-token: write
 
     steps:
-      - uses: actions/checkout@v4
-      - name: Build the Docker image
-        run: docker-compose up --build --remove-orphans
+      #- uses: actions/checkout@v4
+      #- name: Build the Docker image
+        #run: docker-compose up --build --remove-orphans
         #run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
   
   
