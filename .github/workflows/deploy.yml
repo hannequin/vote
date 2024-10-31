@@ -33,8 +33,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: connect and pull
-        run: cd ${{ secrets.WORK_DIR }} && docker compose pull && docker compose up -d && exit
-      - name: cleanup
-        run: rm -rf ~/.ssh
+        run: cd ${{ secrets.WORK_DIR }} && docker-compose pull && docker-compose up -d && exit
+
 
         
