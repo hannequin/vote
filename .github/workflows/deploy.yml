@@ -16,7 +16,7 @@ jobs:
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.DEPLOY }}
-        ssh-known-hosts: ${{ secrets.SERVER_IP }}
+        ssh-auth-sock: ${{ secrets.SERVER_IP }}
       
     - name: connect and pull
       run: |
