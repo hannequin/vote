@@ -12,6 +12,7 @@ env:
 jobs:
   deployment:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     
     permissions:
       contents: read
@@ -23,17 +24,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      # Login against a Docker registry except on PR
-      # https://github.com/docker/login-action
-      - name: Log into registry ${{ env.REGISTRY }}
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1 # v3.0.0
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.5.3
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: connect and pull
-        run: cd ${{ secrets.WORK_DIR }} && docker-compose pull && docker-compose up -d && exit
-
-
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-known-hosts: ${{ secrets.SERVER_IP }}
         
+      - name: connect and pull
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "
+            cd example-voting-app && \
+            docker-compose pull && \
+            docker-compose up -d
+            "
+
+
