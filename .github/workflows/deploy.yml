@@ -1,8 +1,9 @@
 name: Deployment
 
 on:
-  push:
-    branches: 'main'
+  workflow_run:
+    workflows: [Docker Image CI]
+    types: [completed]
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -20,10 +21,7 @@ jobs:
       attestations: write
       id-token: write
 
-    steps:  
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      
+    steps:        
       - name: Install SSH key
         uses: webfactory/ssh-agent@v0.5.3
         with:
